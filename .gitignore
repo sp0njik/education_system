@@ -2,8 +2,8 @@
 .idea/
 *.sqlite3
 *.log
-**/migrations/**
-**/logs/**
+**/migrations/*
+**/logs/*
 
 
 !**/migrations
