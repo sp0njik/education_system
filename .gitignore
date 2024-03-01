@@ -4,6 +4,7 @@
 *.log
 **/migrations/*
 **/logs/*
+**/__pycache__/
 
 
 !**/migrations
