@@ -4,11 +4,9 @@
 
 ## Установка
 
-1. Клонируйте репозиторий:
+####1. Клонируйте репозиторий:
 
-Bash
-
-git clone https://github.com/sp0njik/education_system.git
+- git clone https://github.com/sp0njik/education_system.git
 
 2. Установите зависимости:
 
