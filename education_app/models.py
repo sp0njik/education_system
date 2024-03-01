@@ -4,6 +4,11 @@ from django.db import models
 
 class Student(AbstractUser):
     def has_access(self, product):
+        # """
+        # Проверяет, имеет ли пользователь доступ к определенному продукту
+        # параметры:product - продукт для которого проверяется доступ
+        # возвращает: True, если пользователь имеет доступ, иначе False
+        # """
         return self.groups.filter(product=product).exists()
 
     def __str__(self):
@@ -39,7 +44,13 @@ class Product(models.Model):  # создаем модель продукта
     def __str__(self):
         return self.name
 
-    def grant_access(self, user):  # функция выдачи доступа
+    def grant_access(self, user):
+        # '''
+        # Предоставляет доступ к группе для указанного пользователя
+        # параметры:user - пользователь для которого предоставляется доступ
+        # вызывает:NoAvailableGroupsError - если нет доступных групп для пользователя
+        #
+        # '''
         group = self.groups.annotate(group_users_count=models.Count('members')).filter(
             group_users_count__lt=self.max_group_users).order_by('group_users_count').first()  # выбираем группу
         if not group:
@@ -60,11 +71,11 @@ class Lesson(models.Model):  # создаем модель урока
 
 
 class Group(models.Model):  # создаем модель группы
-    product: Product = models.ForeignKey(Product, related_name="groups", on_delete=models.CASCADE,
+    product: Product = models.ForeignKey(Product, related_name="group", on_delete=models.CASCADE,
                                          verbose_name="Продукт")  # создаем продукт группы
     members = models.ManyToManyField(Student, related_name='education_groups',
                                      verbose_name="Участники")  # создаем участников
     name: str = models.CharField(max_length=100, verbose_name="Название группы")  # создаем название группы
 
     def __str__(self):
-        return self.group_name
+        return self.name

@@ -3,7 +3,7 @@ from rest_framework import serializers
 from education_app.models import Product, Lesson
 
 
-class ProductSerializer(serializers.ModelSerializer):
+class ProductSerializer(serializers.ModelSerializer): # создаем сериализатор продукта
     author = serializers.StringRelatedField(read_only=True)
 
     class Meta:
@@ -11,13 +11,13 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ('author', 'name', 'start_at', 'cost', 'lessons_count')
 
 
-class LessonSerializer(serializers.ModelSerializer):
+class LessonSerializer(serializers.ModelSerializer): # создаем сериализатор урока
     class Meta:
         model = Lesson
         fields = ('name', 'link_to_video')
 
 
-class ProductLessonsSerializer(serializers.ModelSerializer):
+class ProductLessonsSerializer(serializers.ModelSerializer): # создаем сериализатор продукта с уроками
     lessons = LessonSerializer(many=True, read_only=True)
 
     class Meta:

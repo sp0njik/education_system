@@ -8,7 +8,7 @@ from education_app.serializers import ProductSerializer, ProductLessonsSerialize
 from education_app.permissions import ProductAccessPermission
 
 
-class ProductViewSet(viewsets.ReadOnlyModelViewSet):
+class ProductViewSet(viewsets.ReadOnlyModelViewSet):  # создаем viewset для продуктов
     queryset = Product.objects.select_related('author').prefetch_related('lessons').all()
 
     def get_serializer_class(self):
