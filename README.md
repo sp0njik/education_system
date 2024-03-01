@@ -6,7 +6,7 @@
 
 ####1. Клонируйте репозиторий:
 
-- git clone https://github.com/sp0njik/education_system.git
+>git clone https://github.com/sp0njik/education_system.git
 
 2. Установите зависимости:
 
