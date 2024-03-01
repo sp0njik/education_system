@@ -13,44 +13,44 @@ class NoAvailableGroupsError(Exception):
 
 class Product(models.Model):  # создаем модель продукта
     author: str = models.ForeignKey(User, on_delete=models.CASCADE,
-                                    verbose_name="Автор")  # создаем автора продукта (кто создал продукт)
+                                    verbose_name="Автор")  # создаем автора продукта
     name: str = models.CharField(
         max_length=100, verbose_name="Название"
     )  # создаем название продукта
     start_at: str = models.DateTimeField(
         verbose_name="Начало"
     )  # создаем время начала продукта
-    cost: float = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Стоимость")
-    min_group_users: int = models.PositiveSmallIntegerField(verbose_name="Минимальное количество пользователей")
-    max_group_users: int = models.PositiveSmallIntegerField(verbose_name="Максимальное количество пользователей")
+    cost: float = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Стоимость") # создаем стоимость
+    min_group_users: int = models.PositiveSmallIntegerField(verbose_name="Минимальное количество пользователей") # создаем минимальное количество пользователей
+    max_group_users: int = models.PositiveSmallIntegerField(verbose_name="Максимальное количество пользователей") # создаем максимальное количество пользователей
 
-    def __str__(self):  # переопределяем метод __str__
+    def __str__(self):
         return self.name
 
-    def grant_access(self, user):
+    def grant_access(self, user):  # функция выдачи доступа
         group = self.groups.annotate(group_users_count=models.Count('members')).filter(
-            group_users_count__lt=self.max_group_users).order_by('group_users_count').first()
+            group_users_count__lt=self.max_group_users).order_by('group_users_count').first() # выбираем группу
         if not group:
             raise NoAvailableGroupsError('Нет доступных групп. Добавьте новую группу.')
         group.members.add(user)
 
 
 class Lesson(models.Model):  # создаем модель урока
-    product: Product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="Продукт")
+    product: Product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="Продукт")  # создаем продукт урока
     name: str = models.CharField(
         max_length=100, verbose_name="Название"
-    )
-    link_to_video: str = models.URLField(verbose_name="Ссылка на видео")
+    )  # создаем название урока
+    link_to_video: str = models.URLField(verbose_name="Ссылка на видео")  # создаем ссылку на видео
 
     def __str__(self):
         return self.name
 
 
-class Group(models.Model):
+class Group(models.Model):  # создаем модель группы
     product: Product = models.ForeignKey(Product, related_name="groups", on_delete=models.CASCADE,
-                                         verbose_name="Продукт")
-    members = models.ManyToManyField(User, related_name='groups', verbose_name="Участники")
-    name: str = models.CharField(max_length=100, verbose_name="Название группы")
+                                         verbose_name="Продукт")    # создаем продукт группы
+    members = models.ManyToManyField(User, related_name='groups', verbose_name="Участники") # создаем участников
+    name: str = models.CharField(max_length=100, verbose_name="Название группы") # создаем название группы
 
     def __str__(self):
         return self.group_name
